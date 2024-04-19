@@ -7,10 +7,16 @@ class User {
         +email
         +cin
         +password
+        +login()
+        +signup()
+        +adjustSpeedLimit()
+        +assignZone()
 }
 
-class Client {
+class Admin {
         +company
+        +assignTracker()
+        +revokeTracker()
 }
 
 class Employee {
@@ -23,17 +29,21 @@ class Tracker {
         +latitude
         +longtitude
         +date
+        +imei
+        +sendCurrentPosition()
+        +sendCurrentSpeed()
 }
 
 class History {
         +id
+        +deleteOldLogs()
 }
 
-User ^-- Client
+User ^-- Admin
 User ^-- Employee
 History o-- Tracker
 
-Employee "1.1" -- "0.*" Client
+Employee "1.1" -- "0.*" Admin
 Employee "0.*" -- "0.1" Tracker
-Client "0.*" -- "1.1" Tracker
+Admin "0.*" -- "1.1" Tracker
 @enduml
