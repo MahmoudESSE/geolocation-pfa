@@ -1,0 +1,39 @@
+@startuml
+class User {
+        +id
+        +username
+        +address
+        +phone
+        +email
+        +cin
+        +password
+}
+
+class Client {
+        +company
+}
+
+class Employee {
+        +first_name
+        +last_name
+}
+
+class Tracker {
+        +id
+        +latitude
+        +longtitude
+        +date
+}
+
+class History {
+        +id
+}
+
+User ^-- Client
+User ^-- Employee
+History o-- Tracker
+
+Employee "1.1" -- "0.*" Client
+Employee "0.*" -- "0.1" Tracker
+Client "0.*" -- "1.1" Tracker
+@enduml

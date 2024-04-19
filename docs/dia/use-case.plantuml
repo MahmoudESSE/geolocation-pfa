@@ -1,0 +1,62 @@
+@startuml
+together {
+        actor :Admin: as admin #text:red
+        actor :Employee: as employee #text:green
+}
+
+left to right direction
+package geolocation-web {
+        usecase (sign up) as uc1
+        together {
+                usecase (create employee) as uc3
+                usecase (modify employee) as uc4
+                usecase (delete employee) as uc5
+                usecase (configure employees) as uc6
+                usecase (create tracker) as uc10
+                usecase (modify tracker) as uc11
+                usecase (delete tracker) as uc12
+                usecase (configure trackers) as uc13
+                usecase (login) as uc14
+        }
+        together {
+                usecase (manage trackers) as uc9
+                usecase (manage employees) as uc2
+                together {
+                        usecase (view map) as uc7
+                        usecase (view tracker history) as uc8
+                }
+        }
+        together {
+                usecase (assign tracker) as uc15
+                usecase (adjust speed limit) as uc16
+                usecase (assign zone) as uc17
+        }
+}
+
+admin <|-- employee
+
+admin -- uc1 #line:red
+admin -- uc2 #line:red
+uc2 --> uc3
+uc2 --> uc4
+uc2 --> uc5
+uc6 .> uc2 #line:blue;text:blue : extend
+uc6 --> uc15
+uc2 .> uc14 #line:purple;text:purple : include
+
+admin -- uc7 #line:red
+admin -- uc8 #line:red
+employee -- uc7 #line:green
+employee -- uc8 #line:green
+uc7 .> uc14 #line:purple;text:purple : include
+uc8 .> uc14 #line:purple;text:purple : include
+
+employee -- uc9 #line:green
+uc9 --> uc10
+uc9 --> uc11
+uc9 --> uc12
+uc13 .> uc9 #line:blue;text:blue : extend
+uc13 --> uc16
+uc13 --> uc17
+uc9 .> uc14 #line:purple;text:purple : include
+@endumL
