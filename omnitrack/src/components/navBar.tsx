@@ -64,10 +64,16 @@ const NavBar = () => {
               <TrackerForm
                 title="Ajouter Tracker"
                 submitText="Ajouter"
-                action={mutateTracker}
+                action={addTracker}
               />
             </DialogContent>
           </Dialog>
+          <Link
+            href="/map"
+            className="text-foreground transition-colors hover:text-foreground"
+          >
+            Map
+          </Link>
         </nav>
         <Sheet>
           <SheetTrigger asChild>
