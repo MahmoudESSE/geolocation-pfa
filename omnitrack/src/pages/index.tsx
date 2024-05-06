@@ -1,8 +1,26 @@
 import Head from "next/head";
 import NavBar from "@/components/navBar";
 import TrackerCardList from "@/components/trackerCardsList";
+import { useSession } from "next-auth/react";
+import LoginForm from "@/components/loginForm";
 
 const Home = () => {
+  const { status } = useSession();
+  if (status === "unauthenticated") {
+    return (
+      <>
+        <Head>
+          <title>OmniTrack</title>
+          <meta name="description" content="track devices and manage them" />
+          <link rel="icon" href="/inbox_tray/favicon.ico" />
+        </Head>
+        <div className="flex min-h-screen w-full flex-col">
+          <LoginForm />
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <Head>
