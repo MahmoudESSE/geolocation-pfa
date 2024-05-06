@@ -5,8 +5,8 @@ export const TrackerSchema = z.object({
     .string({ message: "Le nom du tracker est obligatoire" })
     .min(3, "Le nom doit contenir 3+ characteres"),
   speed: z.coerce.number().default(4.0).optional(),
-  longtitude: z.coerce.number().nullable(),
-  latitude: z.coerce.number().nullable(),
+  longtitude: z.coerce.number().default(0).nullable(),
+  latitude: z.coerce.number().default(0).nullable(),
   imei: z.coerce.number({ message: "L'imei est obligatoire" }),
 });
 

@@ -43,10 +43,10 @@ const TrackerCardList = () => {
   }
 
   return (
-    <>
+    <ul className="flex flex-row flex-wrap gap-4">
       {trackers.map((tracker) => {
         return (
-          <>
+          <li key={tracker.id}>
             <Card>
               <CardHeader>
                 <CardTitle>{tracker.name}</CardTitle>
@@ -76,10 +76,10 @@ const TrackerCardList = () => {
                 </Button>
               </CardFooter>
             </Card>
-          </>
+          </li>
         );
       })}
-    </>
+    </ul>
   );
 };
 

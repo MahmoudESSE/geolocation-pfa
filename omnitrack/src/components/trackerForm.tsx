@@ -1,4 +1,8 @@
-import { type SubmitHandler, useForm } from "react-hook-form";
+import {
+  type SubmitHandler,
+  useForm,
+  SubmitErrorHandler,
+} from "react-hook-form";
 import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
 import {
   Form,
@@ -33,15 +37,22 @@ const TrackerForm = ({
     defaultValues: initialValues,
   });
   const submitHandler: SubmitHandler<TrackerType> = (tracker) => {
-    console.log("Submitting ...");
-    console.log(tracker);
+    console.log("Submitting..." + JSON.stringify(tracker));
     action(tracker);
+  };
+  const errorHandler: SubmitErrorHandler<TrackerType> = (errors) => {
+    console.log(errors);
   };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(submitHandler)}>
+      <form
+        onSubmit={form.handleSubmit(submitHandler, errorHandler)}
+        className="space-y-8"
+      >
         <DialogHeader>
-          <h3 className="text-lg font-semibold">{title}</h3>
+          <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
+            {title}
+          </h3>
         </DialogHeader>
         <div className="py-2">
           <FormField

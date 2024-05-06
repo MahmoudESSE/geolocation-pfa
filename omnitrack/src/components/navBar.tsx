@@ -64,7 +64,7 @@ const NavBar = () => {
               <TrackerForm
                 title="Ajouter Tracker"
                 submitText="Ajouter"
-                action={addTracker}
+                action={mutateTracker}
               />
             </DialogContent>
           </Dialog>
