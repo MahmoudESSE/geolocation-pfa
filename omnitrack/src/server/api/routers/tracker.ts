@@ -28,30 +28,39 @@ export const trackerRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(trackers).values({
         monitoredById: ctx.session.user.id,
-        ...input
+        ...input,
       });
     }),
+
   update: protectedProcedure
-    .input(TrackerSchema.merge(z.object({
-      id: z.number()
-    })))
+    .input(
+      TrackerSchema.merge(
+        z.object({
+          id: z.number(),
+        }),
+      ),
+    )
     .mutation(async ({ ctx, input: { id, ...tracker } }) => {
-      await ctx.db.update(trackers)
+      await ctx.db
+        .update(trackers)
         .set({
-          ...tracker
+          ...tracker,
         })
         .where(eq(trackers.id, id));
     }),
+
   delete: protectedProcedure
-    .input(z.object({
-      id: z.number()
-    }))
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
     .mutation(async ({ ctx, input: { id } }) => {
-      await ctx.db.delete(trackers)
-        .where(eq(trackers.id, id));
+      await ctx.db.delete(trackers).where(eq(trackers.id, id));
     }),
+
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.select().from(trackers)
+    return ctx.db.select().from(trackers);
   }),
 
   getLatest: protectedProcedure.query(({ ctx }) => {

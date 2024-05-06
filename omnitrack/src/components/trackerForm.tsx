@@ -1,33 +1,44 @@
-import { SubmitHandler, useForm } from "react-hook-form"
-import { DialogFooter, DialogHeader } from "./ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "./ui/form"
-import { Input } from "./ui/input"
-import { TrackerSchema, TrackerType } from "@/server/helpers/trackerValidator"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "./ui/button"
-
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  TrackerSchema,
+  type TrackerType,
+} from "@/server/helpers/trackerValidator";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
 
 interface FormProps {
-  title: string
-  submitText: string
-  tracker?: TrackerType,
-  action: (tracker: TrackerType) => void
+  title: string;
+  submitText: string;
+  tracker?: TrackerType;
+  action: (tracker: TrackerType) => void;
 }
-const TrackerForm = (
-  { title, submitText, tracker: initialValues, action }: FormProps
-) => {
+const TrackerForm = ({
+  title,
+  submitText,
+  tracker: initialValues,
+  action,
+}: FormProps) => {
   const form = useForm<TrackerType>({
     resolver: zodResolver(TrackerSchema),
-    defaultValues: initialValues
-  })
+    defaultValues: initialValues,
+  });
   const submitHandler: SubmitHandler<TrackerType> = (tracker) => {
     console.log("Submitting ...");
-
     console.log(tracker);
-    action(tracker)
-  }
+    action(tracker);
+  };
   return (
-    <Form {...form} >
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(submitHandler)}>
         <DialogHeader>
           <h3 className="text-lg font-semibold">{title}</h3>
@@ -53,11 +64,7 @@ const TrackerForm = (
               <FormItem>
                 <FormLabel>International Mobile Equipment Identity</FormLabel>
                 <FormControl>
-                  <Input
-                    type="number"
-                    placeholder="IMEI"
-                    {...field}
-                  />
+                  <Input type="number" placeholder="IMEI" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -70,9 +77,7 @@ const TrackerForm = (
               <FormItem>
                 <FormLabel>Vitesse</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="Vitesse"
-                    {...field} />
+                  <Input placeholder="Vitesse" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,9 +89,7 @@ const TrackerForm = (
         </DialogFooter>
       </form>
     </Form>
-  )
-}
+  );
+};
 
-export {
-  TrackerForm
-}
+export { TrackerForm };

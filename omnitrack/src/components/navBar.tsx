@@ -13,38 +13,39 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React from "react";
-import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TrackerForm } from "./trackerForm";
-import { TrackerType } from "@/server/helpers/trackerValidator";
+import { type TrackerType } from "@/server/helpers/trackerValidator";
+import { api } from "@/utils/api";
 
 const NavBar = () => {
-  const { data: sessionData, status } = useSession();
-  // const router = useRouter()
-  // React.useEffect(function() {
-  //   if (status === "unauthenticated") {
-  //     router.push("/login?return=/")
-  //   }
-  // }, [status])
-  function addTracker(tracker: TrackerType) {
-    console.log("Added")
-    console.log(tracker);
+  const { data: sessionData } = useSession();
+  const utils = api.useUtils();
+  const { mutate: mutateTracker } = api.tracker.create.useMutation({
+    onSuccess: async () => {
+      await utils.tracker.getAll.invalidate();
+    },
+  });
 
+  function addTracker(tracker: TrackerType) {
+    console.log("Added:" + JSON.stringify(tracker));
+    mutateTracker(tracker);
   }
+
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           <Link
-            href="#"
+            href="/"
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
             <Inbox className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
+            <span className="sr-only">OmniTrack Inc</span>
           </Link>
           <Link
-            href="#"
+            href="/"
             className="text-foreground transition-colors hover:text-foreground"
           >
             Trackers
@@ -56,7 +57,7 @@ const NavBar = () => {
                 className="border-emerald-600"
                 size="icon"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="h-5 w-5" />
               </Button>
             </DialogTrigger>
             <DialogContent>
@@ -67,12 +68,6 @@ const NavBar = () => {
               />
             </DialogContent>
           </Dialog>
-          <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Settings
-          </Link>
         </nav>
         <Sheet>
           <SheetTrigger asChild>
@@ -100,8 +95,11 @@ const NavBar = () => {
               >
                 Trackers
               </Link>
-              <Link href="#" className="hover:text-foreground">
-                Settings
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground"
+              >
+                AddTracker
               </Link>
             </nav>
           </SheetContent>

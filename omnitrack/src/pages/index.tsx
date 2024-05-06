@@ -3,11 +3,9 @@ import NavBar from "@/components/navBar";
 import TrackerCardList from "@/components/trackerCardsList";
 import { useSession } from "next-auth/react";
 import LoginForm from "@/components/loginForm";
-import { useRouter } from "next/router";
 
 const Home = () => {
   const { status } = useSession();
-  const router = useRouter()
   if (status === "unauthenticated") {
     return (
       <>

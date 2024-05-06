@@ -6,6 +6,7 @@ import {
   publicProcedure,
 } from "@/server/api/trpc";
 import { histories } from "@/server/db/schema";
+import { eq } from "drizzle-orm";
 
 export const historyRouter = createTRPCRouter({
   hello: publicProcedure
@@ -21,17 +22,45 @@ export const historyRouter = createTRPCRouter({
   }),
 
   create: protectedProcedure
-    .input(z.object({ id: z.number() }))
+    .input(
+      z.object({
+        createdById: z.number({ message: "id of tracker not provided" }),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
-      await ctx.db.insert(histories).values({
-        createdById: input.id,
+      return await ctx.db.insert(histories).values({
+        ...input,
       });
     }),
 
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        createdById: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { id, createdById } }) => {
+      return await ctx.db
+        .update(histories)
+        .set({
+          createdById: createdById,
+        })
+        .where(eq(histories.id, id));
+    }),
+
+  delete: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .mutation(async ({ ctx, input: { id } }) => {
+      return await ctx.db.delete(histories).where(eq(histories.id, id));
+    }),
+
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.db.query.histories.findMany({
-      orderBy: (histories, { desc }) => [desc(histories.savedAt)],
-    });
+    return ctx.db.select().from(histories);
   }),
 
   getLatest: protectedProcedure.query(({ ctx }) => {
