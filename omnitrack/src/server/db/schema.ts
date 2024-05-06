@@ -1,6 +1,5 @@
 import { relations, sql } from "drizzle-orm";
 import {
-  bigint,
   index,
   integer,
   pgEnum,
@@ -53,8 +52,8 @@ export const trackers = createTable(
     createdAt: timestamp("createdAt", { withTimezone: true, precision: 6 })
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
-    imei: bigint("imei", { mode: "bigint" }),
-    speed: real("speed").default(4.0),
+    imei: integer("imei").notNull(),
+    speed: real("speed").default(4.0).notNull(),
   },
   (user) => ({
     trackerMonitoredByIdIdx: index("trackerMonitoredById_idx").on(

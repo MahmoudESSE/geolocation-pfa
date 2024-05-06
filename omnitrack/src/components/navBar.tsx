@@ -1,4 +1,4 @@
-import { CircleUser, Inbox, Menu, Package2, Search } from "lucide-react";
+import { CircleUser, Inbox, Menu, Package2, Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -13,9 +13,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import React from "react";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { TrackerForm } from "./trackerForm";
+import { TrackerType } from "@/server/helpers/trackerValidator";
 
 const NavBar = () => {
-  const { data: sessionData } = useSession();
+  const { data: sessionData, status } = useSession();
+  // const router = useRouter()
+  // React.useEffect(function() {
+  //   if (status === "unauthenticated") {
+  //     router.push("/login?return=/")
+  //   }
+  // }, [status])
+  function addTracker(tracker: TrackerType) {
+    console.log("Added")
+    console.log(tracker);
+
+  }
   return (
     <>
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -33,6 +49,24 @@ const NavBar = () => {
           >
             Trackers
           </Link>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="border-emerald-600"
+                size="icon"
+              >
+                <Plus className="w-5 h-5" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <TrackerForm
+                title="Ajouter Tracker"
+                submitText="Ajouter"
+                action={addTracker}
+              />
+            </DialogContent>
+          </Dialog>
           <Link
             href="#"
             className="text-muted-foreground transition-colors hover:text-foreground"
