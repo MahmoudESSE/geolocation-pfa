@@ -2,11 +2,23 @@ import Head from "next/head";
 import NavBar from "@/components/navBar";
 import { useSession } from "next-auth/react";
 import LoginForm from "@/components/loginForm";
-import Map, { Marker } from "react-map-gl";
+import { Map, Marker } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import { api } from "@/utils/api";
+import DeckGl from "@deck.gl/react";
+import { useState } from "react";
+import { type MapViewState } from "@deck.gl/core";
+import { type TransitionProps } from "node_modules/@deck.gl/core/dist/controllers/transition-manager";
 
 const Home = () => {
   const { status } = useSession();
+
+  const { data: map } = api.map.mapAccessToken.useQuery();
+  const [viewState, setViewState] = useState<TransitionProps | MapViewState>({
+    longitude: -6.8340222,
+    latitude: 34.02236,
+    zoom: 9,
+  });
 
   if (status === "unauthenticated") {
     return (
@@ -33,20 +45,28 @@ const Home = () => {
       <div className="flex min-h-screen w-full flex-col">
         <NavBar />
         <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-          <Map
-            initialViewState={{
-              latitude: 37.8,
-              longitude: -122.4,
-              zoom: 9,
-            }}
-            style={{ width: 800, height: 600 }}
-            mapboxAccessToken={
-              "pk.eyJ1IjoibWFobW91ZGVzc2UiLCJhIjoiY2x2dmcybHBoMWVnajJqbndoOHpsb2F0aiJ9.8mivemx3LMvrunxfrun7ug"
-            }
-            mapStyle={"mapbox://styles/mapbox/streets-v9"}
-          >
-            <Marker longitude={-122.4} latitude={37.8} color="red" />
-          </Map>
+          <div className="h-full w-full">
+            <DeckGl
+              // width={"100vh"}
+              // height={"100vh"}
+              initialViewState={viewState}
+              onViewStateChange={(e) => setViewState(e.viewState)}
+              controller={true}
+            >
+              {map?.mapAccessToken && (
+                <Map
+                  mapboxAccessToken={map.mapAccessToken}
+                  mapStyle={map.mapStyle}
+                >
+                  <Marker
+                    longitude={-6.651904}
+                    latitude={34.249114}
+                    color="red"
+                  />
+                </Map>
+              )}
+            </DeckGl>
+          </div>
         </main>
       </div>
     </>

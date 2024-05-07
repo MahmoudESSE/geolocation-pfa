@@ -11,6 +11,12 @@ importers:
       '@auth/drizzle-adapter':
         specifier: ^0.7.0
         version: 0.7.0
+      '@deck.gl/core':
+        specifier: ^9.0.14
+        version: 9.0.14
+      '@deck.gl/react':
+        specifier: ^9.0.14
+        version: 9.0.14(@deck.gl/core@9.0.14)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       '@hookform/resolvers':
         specifier: ^3.3.4
         version: 3.3.4(react-hook-form@7.51.4(react@18.2.0))
