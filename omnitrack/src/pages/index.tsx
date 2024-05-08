@@ -3,11 +3,28 @@ import NavBar from "@/components/navBar";
 import TrackerCardList from "@/components/trackerCardsList";
 import { useSession } from "next-auth/react";
 import LoginForm from "@/components/loginForm";
+import Analytics from "@segment/analytics-node";
+import { api } from "@/utils/api";
 
 const Home = () => {
-  const { data, status } = useSession();
+  const { data: sessionData, status } = useSession();
 
-  if (status === "unauthenticated" || !data?.user) {
+  const { data: segment } = api.segment.segment.useQuery();
+
+  if (!segment?.segmentWriteKey) {
+    return <></>;
+  }
+  const analytics = new Analytics({ writeKey: segment.segmentWriteKey });
+
+  analytics.on("error", (err) => console.error(err));
+
+  analytics.on("identify", (ctx) => console.log(ctx));
+
+  analytics.on("track", (ctx) => console.log(ctx));
+
+  analytics.on("http_request", (event) => console.log(event));
+
+  if (status === "unauthenticated" || !sessionData?.user) {
     return (
       <>
         <Head>
@@ -21,6 +38,20 @@ const Home = () => {
       </>
     );
   }
+
+  analytics.identify({
+    userId: sessionData.user.id,
+    traits: {
+      name: sessionData.user.name,
+      email: sessionData.user.name,
+    },
+  });
+
+  analytics.page({
+    userId: sessionData.user.id,
+    category: "DashBoard",
+    name: "Home Page",
+  });
 
   return (
     <>
