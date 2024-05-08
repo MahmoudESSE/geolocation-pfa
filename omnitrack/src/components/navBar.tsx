@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TrackerForm } from "./trackerForm";
 import { type TrackerType } from "@/server/helpers/trackerValidator";
 import { api } from "@/utils/api";
+import Analytics from "@segment/analytics-node";
 
 const NavBar = () => {
   const { data: sessionData } = useSession();
@@ -28,9 +29,45 @@ const NavBar = () => {
     },
   });
 
+  if (!sessionData) {
+    return <></>;
+  }
+
+  const { data: segment } = api.segment.segment.useQuery();
+
+  if (!segment?.segmentWriteKey) {
+    return <></>;
+  }
+
+  const analytics = new Analytics({ writeKey: segment.segmentWriteKey });
+
+  analytics.on("error", (err) => console.error(err));
+
+  analytics.on("identify", (ctx) => console.log(ctx));
+
+  analytics.on("track", (ctx) => console.log(ctx));
+
+  analytics.on("http_request", (event) => console.log(event));
+
+  analytics.identify({
+    userId: sessionData.user.id,
+    traits: {
+      name: sessionData.user.name,
+      email: sessionData.user.name,
+    },
+  });
+
   function addTracker(tracker: TrackerType) {
     console.log("Added:" + JSON.stringify(tracker));
     mutateTracker(tracker);
+    if (!sessionData) {
+      return;
+    }
+
+    analytics.track({
+      userId: sessionData.user.id,
+      event: "Added a tracker",
+    });
   }
 
   return (

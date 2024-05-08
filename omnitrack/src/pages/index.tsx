@@ -5,8 +5,9 @@ import { useSession } from "next-auth/react";
 import LoginForm from "@/components/loginForm";
 
 const Home = () => {
-  const { status } = useSession();
-  if (status === "unauthenticated") {
+  const { data, status } = useSession();
+
+  if (status === "unauthenticated" || !data?.user) {
     return (
       <>
         <Head>

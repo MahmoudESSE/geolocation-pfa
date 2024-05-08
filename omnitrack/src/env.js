@@ -26,6 +26,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string(),
     MAPBOX_ACCESS_TOKEN: z.string(),
     MAPBOX_BASIC_STYLE_URL: z.string().url(),
+    SEGMENT_ANALYTICS_WRITE_KEY: z.string(),
   },
 
   /**
@@ -50,6 +51,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     MAPBOX_ACCESS_TOKEN: process.env.MAPBOX_ACCESS_TOKEN,
     MAPBOX_BASIC_STYLE_URL: process.env.MAPBOX_BASIC_STYLE_URL,
+    SEGMENT_ANALYTICS_WRITE_KEY: process.env.SEGMENT_ANALYTICS_WRITE_KEY,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

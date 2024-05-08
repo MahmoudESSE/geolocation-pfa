@@ -4,6 +4,7 @@ import { trackerRouter } from "./routers/tracker";
 import { historyRouter } from "./routers/history";
 import { exampleRouter } from "./routers/example";
 import { mapRouter } from "./routers/map";
+import { analyticsRouter } from "./routers/analytics";
 
 /**
  * This is the primary router for your server.
@@ -16,6 +17,7 @@ export const appRouter = createTRPCRouter({
   hitory: historyRouter,
   example: exampleRouter,
   map: mapRouter,
+  segment: analyticsRouter,
 });
 
 // export type definition of API
