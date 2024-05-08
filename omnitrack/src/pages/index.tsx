@@ -50,7 +50,12 @@ const Home = () => {
   analytics.page({
     userId: sessionData.user.id,
     category: "DashBoard",
-    name: "Home Page",
+    name: "Tracker Page",
+    properties: {
+      url: "https://omnitrack.dinopp.site",
+      path: "/",
+      title: "Tracker Page",
+    }
   });
 
   return (
